@@ -1,0 +1,34 @@
+flowchart TD
+    User[User Input] --> Interface[Gradio Interface]
+    Interface --> Query["Research Query Generation"]
+    
+    subgraph AgentSystem[AI Agent System]
+        Query --> AgentTeam[Agents Team Initialization]
+        
+        subgraph Agents[Research Agents]
+            LitAgent[Literature Research Agent]
+            MethodAgent[Methodology Agent]
+            DataAgent[Data Analysis Agent]
+            SummaryAgent[Summary & Implications Agent]
+        end
+        
+        AgentTeam --> Agents
+        
+        Agents --> Collaboration[Multi-Agent Collaboration]
+        Collaboration --> Integration[Results Integration]
+    end
+    
+    subgraph ExternalResources[External Resources]
+        WebSearch[Web Search API]
+        Databases[Scientific Databases]
+    end
+    
+    Agents <--> ExternalResources
+    
+    Integration --> Report[Research Report Generation]
+    Report --> FormattedOutput[Formatted Output]
+    FormattedOutput --> Interface
+    
+    style AgentSystem fill:#f5f5ff,stroke:#9999ff,stroke-width:2px
+    style Agents fill:#e6f2ff,stroke:#66b3ff,stroke-width:1px
+    style ExternalResources fill:#fff5e6,stroke:#ffcc80,stroke-width:1px

@@ -1,158 +1,146 @@
-# Python Project Template
+# 🔬 AI Science Research Assistant
 
-This is a basic template for Python projects, set up with a virtual environment and dependency management. It works across **Windows**, **Linux**, and **macOS** systems. Use the provided scripts to set up the virtual environment, install dependencies, and manage your project.
+A multi-agent AI system for generating comprehensive scientific research reports using advanced language models and web search capabilities.
 
-## Setup Instructions
+## Overview
 
-### 1. Clone the Repository
+The AI Science Research Assistant utilizes four specialized AI agents to gather and synthesize the latest scientific research on any topic. Each agent handles a different aspect of the research process, creating a thorough and insightful final report.
 
-First, clone this repository to your local machine:
-```bash
-git clone <repo-url>
-cd <repo-name>
+## System Architecture
+
+```mermaid
+flowchart TD
+    User[User Input] --> Interface[Gradio Interface]
+    Interface --> Query["Research Query Generation"]
+    
+    subgraph AgentSystem[AI Agent System]
+        Query --> AgentTeam[Agents Team Initialization]
+        
+        subgraph Agents[Research Agents]
+            LitAgent[Literature Research Agent]
+            MethodAgent[Methodology Agent]
+            DataAgent[Data Analysis Agent]
+            SummaryAgent[Summary & Implications Agent]
+        end
+        
+        AgentTeam --> Agents
+        
+        Agents --> Collaboration[Multi-Agent Collaboration]
+        Collaboration --> Integration[Results Integration]
+    end
+    
+    subgraph ExternalResources[External Resources]
+        WebSearch[Web Search API]
+        Databases[Scientific Databases]
+    end
+    
+    Agents <--> ExternalResources
+    
+    Integration --> Report[Research Report Generation]
+    Report --> FormattedOutput[Formatted Output]
+    FormattedOutput --> Interface
+    
+    style AgentSystem fill:#f5f5ff,stroke:#9999ff,stroke-width:2px
+    style Agents fill:#e6f2ff,stroke:#66b3ff,stroke-width:1px
+    style ExternalResources fill:#fff5e6,stroke:#ffcc80,stroke-width:1px
 ```
 
-### 2. Running the Setup
+## Agents
 
-The repository includes a cross-platform script that automates the process of setting up your virtual environment, upgrading `pip`, and installing dependencies.
+1. **Literature Research Agent** - Searches for and analyzes relevant academic papers, research articles, and publications on the specified topic.
 
-#### For Windows (PowerShell)
-- Run the following command in PowerShell:
-  ```powershell
-  & "C:\Program Files\Git\bin\bash.exe" -c "./setup_env.sh"
-  ```
+2. **Methodology Agent** - Evaluates research methodologies, experimental designs, and approaches used in the literature.
 
-#### For Linux/macOS (Bash)
-- Run the following command in your terminal:
-  ```bash
-  source setup_env.sh
-  ```
-  
-> **Important**: On Unix systems, you must use `source` to run the script to activate the environment in your current shell.
+3. **Data Analysis Agent** - Focuses on statistical methods, data interpretation, and the significance of research findings.
 
-The script will automatically:
-- Detect your operating system
-- Create a virtual environment if it doesn't exist
-- Activate the virtual environment
-- Upgrade pip to the latest version
-- Install all dependencies from requirements.txt
+4. **Summary & Implications Agent** - Synthesizes research to provide a clear overview, identify trends, and suggest future research directions.
 
----
+## Setup
 
-## Virtual Environment
+### Prerequisites
 
-If you want to **manually create** or **recreate** the virtual environment, you can do so with the following steps:
+- Python 3.8+
+- Gradio
+- Access to LLM APIs (Groq in this implementation)
+- Brave Search API key
 
-### Create a New Virtual Environment
+### Installation
 
-1. Run this command to create a new virtual environment:
-   ```bash
-   python -m venv venv
-   ```
-
-### Create Virtual Environment from Other Python Versions
-
-If you want to use a specific version of Python that is not the default on your system (e.g., Python 3.11), follow these steps:
-
-1. **Download and install the version of Python** you want to use (e.g., Python 3.11).
-2. Use the following command to create a virtual environment from that specific Python version:
-   ```bash
-   C:\Users\YOURCOMPUTERUSERNAME\AppData\Local\Programs\Python\Python311\python.exe -m venv venv
-   ```
-
-### Activate the Virtual Environment
-
-- On **Windows (PowerShell)**:
-  ```powershell
-  .\venv\Scripts\Activate.ps1
-  ```
-
-- On **Linux/macOS (Bash)**:
-  ```bash
-  source venv/bin/activate
-  ```
-
-### Deactivate the Virtual Environment
-
-To deactivate the virtual environment, simply run:
+1. Clone this repository
 ```bash
-deactivate
+git clone https://github.com/yourusername/ai-science-research-assistant.git
+cd ai-science-research-assistant
 ```
 
-### Remove and Recreate the Virtual Environment
-
-If you need to **delete** and **recreate** the virtual environment, follow these steps:
-
-1. Remove the existing `venv` directory:
-   ```bash
-   Remove-Item -Recurse -Force venv  # Windows (PowerShell)
-   rm -rf venv                      # Linux/macOS (Bash)
-   ```
-2. Recreate the virtual environment:
-   ```bash
-   python -m venv venv
-   ```
-
----
-
-## Managing Dependencies
-
-### Installing Dependencies
-
-Once the virtual environment is activated, install the dependencies listed in `requirements.txt`:
+2. Install required packages
 ```bash
 pip install -r requirements.txt
 ```
 
-### Freezing Dependencies
+3. Create a `.env` file in the project root with your API keys
+```
+GROQ_API_KEY=your_groq_api_key
+BRAVE_API_KEY=your_brave_api_key
+OPENAI_API_KEY=your_openai_api_key  # optional alternative
+```
 
-If you install new packages or update existing ones, remember to update `requirements.txt`:
+## Usage
+
+### Web Interface
+
+Run the application and access the web interface:
+
 ```bash
-pip freeze > requirements.txt
+python app.py
 ```
 
----
+Navigate to the provided URL (typically http://127.0.0.1:7860) in your browser.
 
-## Git Setup (if not already configured)
+### Using the Interface
 
-To configure Git for your project:
+1. Enter your research topic (e.g., "CRISPR gene editing applications")
+2. Specify the scope of research (e.g., "Last 5 years, medical applications")
+3. Indicate the desired technical depth (e.g., "Graduate level, include technical details")
+4. Share specific focus areas (e.g., "Clinical trials, ethical considerations, recent breakthroughs")
+5. Click "Generate Research Report"
 
-1. Install [Git](https://git-scm.com/downloads) if you haven't already.
-2. Set your global Git configuration:
-   ```bash
-   git config --global user.name "Your GitHub Username"
-   git config --global user.email "Your GitHub Email"
-   ```
-3. Restart the terminal to apply the changes.
+### CLI Usage
 
----
+You can also use the system programmatically:
 
-## PowerShell Execution Policy (Windows)
+```python
+from app import generate_research_report
 
-If you're using PowerShell on Windows, you may need to change the execution policy to allow scripts to run:
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+report = generate_research_report(
+    topic="Quantum computing algorithms",
+    scope="Last 2 years, focus on cryptography",
+    depth="Advanced technical level",
+    focus_areas="Post-quantum security, optimization problems"
+)
+print(report)
 ```
-This allows local scripts to run but ensures that downloaded scripts are signed.
 
----
+## Features
 
-## Included Setup Scripts
+- **Comprehensive Research**: Combines findings from multiple sources into a cohesive report
+- **Multi-Agent Design**: Specializes different aspects of the research process
+- **Customizable Depth**: Adapts to different technical knowledge levels
+- **Focused Analysis**: Targets specific aspects of interest within broader topics
+- **User-Friendly Interface**: Simple web UI for generating reports
 
-The repository includes the following setup scripts:
+## Limitations
 
-### `setup_env.ps1` (Windows PowerShell)
+- The quality of reports depends on the availability of online research information
+- Not a substitute for in-depth human expert analysis
+- May not have access to the latest papers or research behind paywalls
+- LLM capabilities and knowledge cutoffs apply
 
-This script handles the virtual environment setup on Windows systems.
+## License
 
-### `setup_env.sh` (Linux/macOS)
+MIT License
 
-This script handles the virtual environment setup on Unix-like systems. Remember to run it with `source setup_env.sh` to activate the environment in your current shell.
+## Acknowledgments
 
----
-
-## Conclusion
-
-This template provides a ready-to-go environment for your Python project, ensuring you don't need to repeat the setup process every time. Simply use the provided scripts and enjoy a streamlined development experience!
-
-Feel free to modify the structure or add additional tools as needed for your project.
+- [Praison AI Agents](https://github.com/praison/ai-agents) for the multi-agent framework
+- [Gradio](https://gradio.app/) for the web interface
+- [Llama](https://github.com/facebookresearch/llama) for the language model capabilities
